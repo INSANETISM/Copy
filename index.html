@@ -1279,17 +1279,17 @@ const buyitems = {
 // --- SELL ITEMS ---
 const sellitems = {
   Sets: [
-    { name: "Teddy Bears (4/4)", price: 500, bulkOptions: [1, 5, 10] },
-    { name: "Payday Masks (4/4)", price: 2500, bulkOptions: [1, 5, 10] },
-    { name: "Fish (5/5)", price: 1000, bulkOptions: [1, 5, 10] },
-    { name: "Sneakers (5/5)", price: 1000, bulkOptions: [1, 5, 10] }
+    { name: "Teddy Bears (4/4)", price: 150, bulkOptions: [1, 5, 10] },
+    { name: "Payday Masks (4/4)", price: 500, bulkOptions: [1, 5, 10] },
+    { name: "Fish (5/5)", price: 300, bulkOptions: [1, 5, 10] },
+    { name: "Sneakers (5/5)", price: 200, bulkOptions: [1, 5, 10] }
   ],
   Pelts: {
     Wild: [
-      { name: "Deer Pelt", price: 500, bulkOptions: [1, 5, 10] },
-      { name: "Boar Pelt", price: 500, bulkOptions: [1, 5, 10] },
-      { name: "Wolf Pelt", price: 600, bulkOptions: [1, 5, 10] },
-      { name: "Bear Pelt", price: 1000, bulkOptions: [1, 5, 10] }
+      { name: "Deer Pelt", price: 300, bulkOptions: [1, 5, 10] },
+      { name: "Boar Pelt", price: 300, bulkOptions: [1, 5, 10] },
+      { name: "Wolf Pelt", price: 300, bulkOptions: [1, 5, 10] },
+      { name: "Bear Pelt", price: 500, bulkOptions: [1, 5, 10] }
     ],
     Domestic: [
       { name: "Goat Pelt", price: 100, bulkOptions: [1, 5, 10] },
@@ -1297,7 +1297,7 @@ const sellitems = {
       { name: "Sheep Pelt", price: 100, bulkOptions: [1, 5, 10] }
     ],
     Processed: [
-      { name: "Tanned Leather (8/8)", price: 1000, bulkOptions: [1, 5] }
+      { name: "Tanned Leather (8/8)", price: 500, bulkOptions: [1, 5] }
     ]
   },
   Other: [
@@ -1307,54 +1307,56 @@ const sellitems = {
     { name: "Books", price: 100, bulkOptions: [1, 5, 20] },
     { name: "Filled Blood Bag", price: 100, bulkOptions: [1, 5, 20] },
     { name: "Cassette Tape", price: 100, bulkOptions: [1, 5, 20] },
-    { name: "Radio", price: 500, bulkOptions: [1, 5, 20] },
-    { name: "Spray Paint", price: 500, bulkOptions: [1, 5, 20] },
-    { name: "Oil", price: 1500, bulkOptions: [1, 5, 20] },
-    { name: "Brake Fluid", price: 500, bulkOptions: [1, 5, 20] },
-    { name: "Cocaine", price: 500, bulkOptions: [1, 5, 20] },
+    { name: "Radio", price: 200, bulkOptions: [1, 5, 20] },
+    { name: "Spray Paint", price: 200, bulkOptions: [1, 5, 20] },
+    { name: "Oil", price: 500, bulkOptions: [1, 5, 20] },
+    { name: "Brake Fluid", price: 200, bulkOptions: [1, 5, 20] },
+    { name: "Cocaine", price: 200, bulkOptions: [1, 5, 20] },
     { name: "Mess Tin", price: 500, bulkOptions: [1, 5, 20] },
-    { name: "Bible", price: 10000 },
-    { name: "Golden Deagle", price: 2500 },
-    { name: "Engraved 1911", price: 500 },
-    { name: "Pink Derringer", price: 3000 },
-    { name: "Faction Flag", price: 15000 },
-    { name: "Cannabis", price: 200, bulkOptions: [1, 10, 50] }
+    { name: "Bible", price: 5000 },
+    { name: "Golden Deagle", price: 1500 },
+    { name: "Engraved 1911", price: 200 },
+    { name: "Pink Derringer", price: 1500 },
+    { name: "Chainsaw", price: 4000 },
+    { name: "Refrigerator", price: 4000 },
+    { name: "Faction Flag", price: 0 },
+    { name: "Cannabis", price: 30, bulkOptions: [1, 10, 50] }
   ]
 };
 
 
 const roles = {
-  "Operation Smoke Stack": {
-    description: "Sell 250 cigarettes at once → Each pack sells for ₵500 after",
+  "Chain Smoker": {
+    description: "Sell 250 cigarettes at once → Each pack sells for ₵200 after",
     bonuses: {
-      "Cigarettes": 500
+      "Cigarettes": 200
     }
   },
-  "Ink Kingpin": {
-    description: "Sell 250 pens at once → Pens sell for ₵250 each",
+  "Pen Pusher": {
+    description: "Sell 250 pens at once → Pens sell for ₵200 each",
     bonuses: {
-      "Pens": 250
+      "Pens": 200
     }
   },
-  "Signal Junkie": {
+  "Tech Runner": {
     description: "Turn in 25 radios & 25 cassettes → 25% off electronics at trader",
     discounts: {
       "NV Googles": 25
     }
   },
-  "Krush Cartel": {
-    description: "Grow & sell 10 crates weed at once → Future weed sells for ₵400 per crate",
+  "The Botanist": {
+    description: "Grow & sell 10 crates weed at once → Future weed sells for ₵600 per crate",
     bonuses: {
-      "Cannabis": 400
+      "Cannabis": 600
     }
   },
-  "White Gold Mover": {
-    description: "Sell 150 cocaine units → Units now sell for ₵1,000 each",
+  "Powder Ranger": {
+    description: "Sell 150 cocaine units → Units now sell for ₵400 each",
     bonuses: {
-      "Cocaine": 1000
+      "Cocaine": 400
     }
   },
-  "Desert Demon": {
+  "Golden Gunner": {
     description: "Kill with Gold Deagle → 50% off pistols & ammo",
     discounts: {
       "Deagle": 50,
@@ -1369,33 +1371,33 @@ const roles = {
       ".22 LR": 50
     }
   },
-  "Book of ProfitZ": {
-    description: "Sell 300 books & 1 bible at once → Books sell for ₵300 each; bibles sell for ₵20,000",
+  "Book Worm": {
+    description: "Sell 300 books & 1 bible at once → Books sell for ₵200 each; bibles sell for ₵10,000",
     bonuses: {
-      "Books": 300,
-      "Bible": 20000
+      "Books": 200,
+      "Bible": 10000
     }
   },
-  "Pit Boss": {
-    description: "Turn in 25 deer steaks, 15 boar & 15 bear steaks (cooked, not rotten) → ₵10,000 + 10% off food & drinks",
+  "Master Chef": {
+    description: "Turn in 25 deer steaks, 15 boar & 15 bear steaks (cooked, not rotten) → ₵2,000 + 10% off food & drinks",
     bonuses: {
-      "Food Bonus": 10000 // placeholder for the lump sum bonus
+      "Food Bonus": 2000 // placeholder for the lump sum bonus
     },
     discounts: {
       "Canned Bacon": 10
     }
   },
-  "Wild Game Warlord": {
-    description: "Turn in 10 bears, 10 boar, 20 wolves, 20 deer/reindeer, 10 rabbits",
+  "Master Hunter": {
+    description: "Turn in 10 bears, 10 boar, 20 wolves, 20 deer/reindeer, 10 rabbits → Pelts sell for 1.5x",
     bonuses: {
-      "Bear Pelt": 1500,  
-      "Boar Pelt": 750,
-      "Wolf Pelt": 900,
-      "Deer Pelt": 750
+      "Bear Pelt": 750,  
+      "Boar Pelt": 450,
+      "Wolf Pelt": 450,
+      "Deer Pelt": 450
       // Note: rabbits not included since no data in pelts, you can add if needed
     }
   },
-  "Domestic Dominator": {
+  "Ranch Hand": {
     description: "Turn in 20 goats, 20 cows & 20 sheep pelts → Domestic pelts sell for double",
     bonuses: {
       "Goat Pelt": 200,
@@ -1403,25 +1405,25 @@ const roles = {
       "Sheep Pelt": 200
     }
   },
-  "Bear Broker": {
-    description: "Turn in 5 sets of teddy bears (4 colors per set) → ₵2,500 per set",
+  "Teddy Collector": {
+    description: "Turn in 5 sets of teddy bears (4 colors per set) → ₵500 per set",
     bonuses: {
-      "Teddy Bears (4/4)": 2500
+      "Teddy Bears (4/4)": 500
     }
   },
   "Sneaker Head": {
-    description: "Turn in all 5 sets of sneaker colors → Earn ₵2,500 per set",
+    description: "Turn in all 5 sets of sneaker colors → Earn ₵500 per set",
     bonuses: {
-      "Sneakers (5/5)": 2500
+      "Sneakers (5/5)": 500
     }
   },
-  "Master Baiter": {
-    description: "Turn in 25 Mackerel & 25 Carp or 25 Pollock & 25 Trout. Get $15K and the role.",
+  "Master Fisher": {
+    description: "Turn in 25 Mackerel & 25 Carp or 25 Pollock & 25 Trout. Get $3K → Earn ₵600 per set.",
     bonuses: {
-      "Fish (5/5)": 1500
+      "Fish (5/5)": 600
     }
   },
-  "Trap God": {
+  "Trap Master": {
     description: "Kill 4 players using traps like claymores, landmines, or tripwires. Get 50% off traps.",
     discounts: {
       "Land Mines": 50,
@@ -1429,17 +1431,17 @@ const roles = {
       "Claymores": 50
     }
   },
-  "Cap Collector": {
-    description: "Turn in 9 different ball caps. Get ₵3500 and half off helmets for life.",
+  "Hat Collector": {
+    description: "Turn in 9 different ball caps. Get ₵700 and half off helmets for life.",
     bonuses: {
-      "Cap Bonus": 3500
+      "Cap Bonus": 700
     },
     discounts: {
       "Assault Helmet": 50,
       "Tactical Helm": 50
     }
   },
-  "Boom Buddy": {
+  "Boom Squad": {
     description: "Kill 2 players with 1 plastic explosive or claymore. Get 15% off explosives.",
     discounts: {
       "US/RUS Grenades": 15,
@@ -1450,7 +1452,7 @@ const roles = {
       "Claymores": 15
     }
   },
-  "Brain Surgeon": {
+  "Head Hunter": {
     description: "Get 100 headshots. All ammo and mags are 50% off.",
     discounts: {
       ".357": 50,
@@ -1483,15 +1485,15 @@ const roles = {
       "10 Rnd VS89 Mag": 50
     }
   },
-  "Scope Fiend": {
+  "Longshot": {
     description: "Land 10 sniper kills from over 500 yards. Get 50% off sniper ammo.",
     discounts: {
       "7.62x54mmR": 50,
       ".308 WIN": 50
     }
   },
-  "Whisper Shot": {
-    description: "Snipe and kill from 850 yards. Get 25% off sniper rifles.",
+  "Deadeye": {
+    description: "Snipe and kill from 500 yards. Get 35% off sniper rifles.",
     discounts: {
       "LAR": 25,
       "DMR": 25,
@@ -1502,7 +1504,7 @@ const roles = {
       "Mosin": 25
     }
   },
-  "Dexter": {
+  "Blood Donor": {
     description: "Turn in 100 blood bags receive 10% off all medical supplies",
     discounts: {
       "Bandages (2-pack)": 10,
@@ -1519,20 +1521,19 @@ const roles = {
       "Chlorine Tablets": 10
     }
   },
-  "Boom Daddy": {
+  "Demolitions Expert": {
     description: "turn in 50 complete IEDS.",
     bonuses: {
-     "IEDS": 100000
+     "IEDS": 20000
     }
   },
-  "First Bloodz": {
+  "Ash Born": {
     description: " — receive 25% off at trader.",
     discounts: {
       // Apply 25% off all items (handle separately in your code),
-      // or list popular items here for discount
     }
   },
-  "Time Served": {
+  "Ashen Verteran": {
     description: " — receive 20% off at trader.",
     discounts: {
       // Apply 20% off all items (handle separately in your code),
@@ -1542,22 +1543,21 @@ const roles = {
     description: "For our real-world heroes — receive 10% off at trader.",
     discounts: {
       // Apply 10% off all items (handle separately in your code),
-      // or list popular items here for discount
     }
   },
-  "Health Providers": {
+  "Medic": {
     description: "For our nurse's doctors and general health providers - enjoy 10% off at trader.",
     discounts: {
       // Same as above - 10% off all or health-related items
     }
   },
-  "Veterans": {
+  "Veteran": {
     description: "For active military & veterans — enjoy 10% off your trader purchases.",
     discounts: {
       // Same as above - 10% off all or certain categories
     }
   },
-  "Road Rage": {
+  "Road Kill": {
     description: "Run over a geared player (not in safe zone). Earn the role + 10% off vehicle parts.",
     discounts: {
       "Spark Plug": 10,
@@ -1570,7 +1570,7 @@ const roles = {
       "Truck Tires": 10
     }
   },
-  "The Grey": {
+  "Wolfskin Warrior": {
     description: "Kill a wolf with a knife and record it. 10% off knives.",
     discounts: {
       "Combat Knife": 10,
@@ -1580,9 +1580,8 @@ const roles = {
 };
 
 const roleBonuses = {
-  "Pit Boss": 10000,
-  "Cap Collector": 3500,
-  "Boom Daddy": 100000,
+  "Hat Collector": 700,
+  "Demolitions Expert": 20000,
 };
 
 const itemsWithRoleTurnIn = new Set([
@@ -1796,9 +1795,9 @@ if (bibleDiv) {
 let quantity = parseInt(bibleDiv.dataset.quantity);
 
 const hasBibleBoostRole = document
-.querySelector('.role-btn[data-role="First Bloodz"]')
+.querySelector('.role-btn[data-role="Ash Born"]')
 ?.classList.contains("active");
-let unitPrice = hasBibleBoostRole ? 20000 : 10000;
+let unitPrice = hasBibleBoostRole ? 10000 : 5000;
 bibleDiv.dataset.basePrice = unitPrice;
 updateSummaryItem(bibleDiv, quantity, unitPrice);
 }
@@ -1808,13 +1807,13 @@ updateSummaryItem(bibleDiv, quantity, unitPrice);
 function handleRoleTurnIn(item, summaryDiv) {
   switch (item.name) {
     case "Cigarettes":
-      // Operation Smoke Stack: Sell 250 cigarettes at once
+      // Chain Smoker: Sell 250 cigarettes at once
       addItemToSummary(item.name, 250, 100, summaryDiv);
       break;
 
     case "Pens":
-      // Ink Kingpin: Sell 250 pens at once
-      addItemToSummary(item.name, 250, 250, summaryDiv);
+      // Pen Pusher: Sell 250 pens at once
+      addItemToSummary(item.name, 250, 100, summaryDiv);
       break;
 
     case "Radio":
@@ -1827,18 +1826,18 @@ function handleRoleTurnIn(item, summaryDiv) {
       break;
 
     case "Cannabis":
-      // Krush Cartel: Future weed sells for ₵400 per crate
-      addItemToSummary(item.name, 10, 200, summaryDiv);
+      // The Botanist: Future weed sells for ₵600 per crate
+      addItemToSummary(item.name, 10, 300, summaryDiv);
       break;
 
     case "Cocaine":
-      // White Gold Mover: Sell 150 cocaine units at once
-      addItemToSummary(item.name, 150, 1000, summaryDiv);
+      // Powder Ranger: Sell 150 cocaine units at once
+      addItemToSummary(item.name, 150, 200, summaryDiv);
       break;
 
     case "Teddy Bears (4/4)":
-      // Bear Broker: Turn in 5 sets of teddy bears (4 colors per set)
-      addItemToSummary(item.name, 5, 500, summaryDiv);
+      // Teddy Collector: Turn in 5 sets of teddy bears (4 colors per set)
+      addItemToSummary(item.name, 5, 150, summaryDiv);
       break;
 
     case "Sneakers (5/5)":
@@ -1850,31 +1849,31 @@ function handleRoleTurnIn(item, summaryDiv) {
      // Example: Turn in Mackerel + Carp
      addItemToSummary("Mackerel / Pollock", 25, 0, summaryDiv);
      addItemToSummary("Carp / Trout", 25, 0, summaryDiv);
-     addItemToSummary("Master Baiter Reward", 1, 15000, summaryDiv);
+     addItemToSummary("Master Fisher Reward", 1, 3000, summaryDiv);
      break;
 
     case "Books":
-      // Book of ProfitZ: Sell 300 books & 1 bible at once
+      // Book Worm: Sell 300 books & 1 bible at once
       addItemToSummary(item.name, 300, 100, summaryDiv);
-      addItemToSummary("Bible", 1, 20000, summaryDiv);
+      addItemToSummary("Bible", 1, 5000, summaryDiv);
       break;
 
     case "Bear Pelt":
     case "Boar Pelt":
     case "Wolf Pelt":
     case "Deer Pelt":
-      // Wild Game Warlord: Turn in 10 bears, 10 boar, 20 wolves, 20 deer/reindeer, 10 rabbits
-      addItemToSummary("Bear Pelt", 10, 1000, summaryDiv);
-      addItemToSummary("Wolf Pelt", 20, 600, summaryDiv);
-      addItemToSummary("Boar Pelt", 10, 500, summaryDiv);
-      addItemToSummary("Deer Pelt", 20, 500, summaryDiv);
+      // Master Hunter: Turn in 10 bears, 10 boar, 20 wolves, 20 deer/reindeer, 10 rabbits
+      addItemToSummary("Bear Pelt", 10, 500, summaryDiv);
+      addItemToSummary("Wolf Pelt", 20, 300, summaryDiv);
+      addItemToSummary("Boar Pelt", 10, 300, summaryDiv);
+      addItemToSummary("Deer Pelt", 20, 300, summaryDiv);
       addItemToSummary("Rabbit Pelt", 10, 0, summaryDiv);
       break;
 
     case "Goat Pelt":
     case "Cow Pelt":
     case "Sheep Pelt":
-      // Domestic Dominator: Turn in 20 goat, 20 cow, 20 sheep pelts
+      // Ranch Hand: Turn in 20 goat, 20 cow, 20 sheep pelts
       addItemToSummary("Goat Pelt", 20, 100, summaryDiv);
       addItemToSummary("Cow Pelt", 20, 100, summaryDiv);
       addItemToSummary("Sheep Pelt", 20, 100, summaryDiv);
@@ -1882,7 +1881,7 @@ function handleRoleTurnIn(item, summaryDiv) {
 
     case "Filled Blood Bag":
     case "Blood Bag":
-      // Dexter: Turn in 100 blood bags
+      // Blood Donor: Turn in 100 blood bags
       addItemToSummary(item.name, 100, item.price, summaryDiv);
       break;
 
@@ -1890,7 +1889,7 @@ function handleRoleTurnIn(item, summaryDiv) {
     case "Carp":
     case "Pollock":
     case "Trout":
-      // Master Baiter: Turn in 25 Mackerel & 25 Carp or 25 Pollock & 25 Trout
+      // Master Fisher: Turn in 25 Mackerel & 25 Carp or 25 Pollock & 25 Trout
       addItemToSummary("Mackerel", 25, item.price, summaryDiv);
       addItemToSummary("Carp", 25, item.price, summaryDiv);
       addItemToSummary("Pollock", 25, item.price, summaryDiv);
@@ -2130,21 +2129,21 @@ const hasRole = (role) =>
 let discount = 1.0;
 let discountLabel = "";
 
-if (hasRole("First Bloodz")) {
+if (hasRole("Ash Born")) {
   discount = 0.75;
-  discountLabel = " (First Bloodz 25% Off)";
-} else if (hasRole("Time Served")) {
+  discountLabel = " (Ash Born 25% Off)";
+} else if (hasRole("Ashen Verteran")) {
   discount = 0.80;
-  discountLabel = " (Time Served 20% Off)";
+  discountLabel = " (Ashen Verteran 20% Off)";
 } else if (
-  hasRole("Veterans") ||
+  hasRole("Veteran") ||
   hasRole("First Responders") ||
-  hasRole("Health Providers")
+  hasRole("Medic")
 ) {
   discount = 0.90;
-  if (hasRole("Veterans")) discountLabel = " (Veterans 10% Off)";
+  if (hasRole("Veteran")) discountLabel = " (Veteran 10% Off)";
   if (hasRole("First Responders")) discountLabel = " (First Responders 10% Off)";
-  if (hasRole("Health Providers")) discountLabel = " (Health Providers 10% Off)";
+  if (hasRole("Medic")) discountLabel = " (Medic 10% Off)";
 }
 
   let discountedBuy = totalBuy * discount;
