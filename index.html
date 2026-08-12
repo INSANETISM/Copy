@@ -8,7 +8,6 @@
 </head>
 
 <style>
-font-family: 'Roboto Mono', monospace, arial, sans-serif;
 
 *,
 *::before,
@@ -1350,6 +1349,16 @@ const roles = {
   "Tech Runner": {
     description: "Turn in 25 radios & 25 cassettes → 25% off electronics at trader",
     discounts: {
+      "Rangefinder": 50,
+      "9V Batteries (4-pack)": 50,
+      "Universal Flashlight": 50,
+      "Megaphone": 25,
+      "Construction Light": 25,
+      "Christmas Lights": 25,
+      "Red Dot": 25,
+      "Starlight NV": 25,
+      "Kazuar NV": 25,
+      "Battery Charger": 25,
       "NV Goggles": 25
     }
   },
@@ -1375,8 +1384,12 @@ const roles = {
       "MKII": 50, 
       "Revolver": 50,
       "FX45": 50,
-      "CR75": 50,
+      "Mlock": 50,
       ".380ACP": 50,
+      "Mlock Mag": 50,
+      "FX45 Mag": 50,
+      "Deagle Mag": 50,
+      "MKII Mag": 50,
       ".22 LR": 50
     }
   },
@@ -1447,7 +1460,9 @@ const roles = {
     },
     discounts: {
       "Assault Helmet": 50,
-      "Tactical Helm": 50
+      "CUU Helmet": 50,
+      "T65 Helmet": 50,
+      "Tactical Helmet": 50
     }
   },
   "Boom Squad": {
@@ -1479,19 +1494,18 @@ const roles = {
       "12GA Rubber": 50,
       "12GA Rifled": 50,
       "40 Rnd C-Mag": 50,
-      "60 Round C-Mag": 50,
-      "30 Rnd KAM Poly Mag": 50,
+      "60 Rnd C-Mag": 50,
       "75 Rnd KAM Mag": 50,
       "20 Rnd Vaiga Mag": 50,
-      "30 Rnd AUR Mag": 50,
-      "45 Rnd 74U Mag": 50,
-      "20 Rnd VSS Mag": 50,
-      "64 Rnd Bizon Mag": 50,
       "20 Rnd DMR Mag": 50,
+      "20 Rnd SCAR17-Mag": 50,
       "20 Rnd LAR Mag": 50,
       "10 Rnd VSD Mag": 50,
-      "10 Rnd Savanna Mag": 50,
-      "10 Rnd VS89 Mag": 50
+      "10 Rnd VS89 Mag": 50,
+      "Mlock Mag": 50,
+      "FX45 Mag": 50,
+      "Deagle Mag": 50,
+      "MKII Mag": 50
     }
   },
   "Longshot": {
@@ -1504,13 +1518,11 @@ const roles = {
   "Deadeye": {
     description: "Snipe and kill from 500 yards. Get 35% off sniper rifles.",
     discounts: {
-      "LAR": 25,
-      "DMR": 25,
-      "M70 Tundra": 25,
-      "Savanna": 25,
-      "VS89": 25,
-      "VSD": 25,
-      "Mosin": 25
+      "DMR": 35,
+      "M70 Tundra": 35,
+      "VS89": 35,
+      "VSD": 35,
+      "Mosin": 35
     }
   },
   "Blood Donor": {
@@ -1526,7 +1538,7 @@ const roles = {
       "Morphine Injector": 10,
       "Blood Test Kit": 10,
       "Blood Collection Kit": 10,
-      "IV Start Kit": 10,
+      "Iodine Tincture": 10,
       "Chlorine Tablets": 10
     }
   },
@@ -1542,7 +1554,7 @@ const roles = {
       // Apply 25% off all items (handle separately in your code),
     }
   },
-  "Ashen Verteran": {
+  "Ashen Veteran": {
     description: " — receive 20% off at trader.",
     discounts: {
       // Apply 20% off all items (handle separately in your code),
@@ -1590,6 +1602,7 @@ const roles = {
 
 const roleBonuses = {
   "Hat Collector": 700,
+  "Master Fisher": 3000,
   "Demolitions Expert": 20000,
 };
 
@@ -1803,7 +1816,7 @@ if (bibleDiv) {
 let quantity = parseInt(bibleDiv.dataset.quantity);
 
 const hasBibleBoostRole = document
-.querySelector('.role-btn[data-role="Ash Born"]')
+.querySelector('.role-btn[data-role="Book Worm"]')
 ?.classList.contains("active");
 let unitPrice = hasBibleBoostRole ? 10000 : 5000;
 bibleDiv.dataset.basePrice = unitPrice;
@@ -1854,11 +1867,13 @@ function handleRoleTurnIn(item, summaryDiv) {
       break;
 
     case "Fish (5/5)":
-     // Example: Turn in Mackerel + Carp
-     addItemToSummary("Mackerel / Pollock", 25, 0, summaryDiv);
-     addItemToSummary("Carp / Trout", 25, 0, summaryDiv);
-     addItemToSummary("Master Fisher Reward", 1, 3000, summaryDiv);
-     break;
+  // Master Fisher:
+  // 25 Mackerel + 25 Carp OR 25 Pollock + 25 Trout
+  // = 50 individual fish
+  // Fish are turned in as 5/5 sets, so 50 fish = 10 sets.
+  addItemToSummary("Fish (5/5)", 10, 300, summaryDiv);
+  addItemToSummary("Master Fisher Reward", 1, 3000, summaryDiv);
+  break;
 
     case "Books":
       // Book Worm: Sell 300 books & 1 bible at once
@@ -1910,22 +1925,13 @@ function handleRoleTurnIn(item, summaryDiv) {
 }
 
 function applyRoleBonuses() {
-  let totalBonus = 0;
-
-  document.querySelectorAll(".role-btn.active").forEach((btn) => {
-    const role = btn.dataset.role;
-    if (roleBonuses[role]) {
-      totalBonus += roleBonuses[role];
-    }
-  });
-
-  // Show or update bonus display
   const bonusDiv = document.getElementById("bonus-total");
+
   if (bonusDiv) {
-    bonusDiv.textContent = `₵${totalBonus.toLocaleString()}`;
+    bonusDiv.textContent = "₵0";
   }
 }
-
+  
 function updateSummaryItem(div, quantity, basePrice) {
 let itemName = div.dataset.itemName;
 let discountedPrice = calculateDiscountedPrice(itemName, basePrice, true);
@@ -2062,42 +2068,53 @@ document
 }
 
 function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
-  let finalPrice = basePrice;
-
   const activeRoles = Array.from(
     document.querySelectorAll(".role-btn.active")
   ).map((btn) => btn.dataset.role);
 
-  // -----------------------------------
-  // Specific item discounts
-  // -----------------------------------
+  let finalPrice = basePrice;
+
+  // =====================================================
+  // 1. FIND THE BEST SPECIFIC ITEM DISCOUNT
+  // =====================================================
+
+  let bestSpecificDiscount = 0;
+  let hasSpecificDiscount = false;
+
   activeRoles.forEach((role) => {
     const roleDetails = roles[role];
 
-    if (roleDetails?.discounts?.[itemName]) {
-      const discount = roleDetails.discounts[itemName] / 100;
-      const discountedPrice = basePrice * (1 - discount);
+    if (
+      roleDetails?.discounts &&
+      roleDetails.discounts[itemName] !== undefined
+    ) {
+      const discount = Number(roleDetails.discounts[itemName]);
 
-      finalPrice = Math.min(finalPrice, discountedPrice);
-    }
+      if (discount > bestSpecificDiscount) {
+        bestSpecificDiscount = discount;
+      }
 
-    // Existing special price bonuses
-    if (roleDetails?.bonuses?.[itemName]) {
-      finalPrice = roleDetails.bonuses[itemName];
+      hasSpecificDiscount = true;
     }
   });
 
-  // -----------------------------------
-  // General BUY discounts
-  // -----------------------------------
-  if (isBuy) {
+  // Apply the best specific discount
+  if (hasSpecificDiscount) {
+    finalPrice = basePrice * (1 - bestSpecificDiscount / 100);
+  }
+
+  // =====================================================
+  // 2. GENERAL BUY DISCOUNTS
+  // =====================================================
+
+  if (isBuy && !hasSpecificDiscount) {
     let generalDiscount = 0;
 
     if (activeRoles.includes("Ash Born")) {
       generalDiscount = Math.max(generalDiscount, 25);
     }
 
-    if (activeRoles.includes("Ashen Verteran")) {
+    if (activeRoles.includes("Ashen Veteran")) {
       generalDiscount = Math.max(generalDiscount, 20);
     }
 
@@ -2114,16 +2131,30 @@ function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
     }
 
     if (generalDiscount > 0) {
-      const generalDiscountedPrice =
-        basePrice * (1 - generalDiscount / 100);
-
-      finalPrice = Math.min(finalPrice, generalDiscountedPrice);
+      finalPrice = basePrice * (1 - generalDiscount / 100);
     }
+  }
+
+  // =====================================================
+  // 3. SELL ROLE BONUSES
+  // =====================================================
+
+  if (!isBuy) {
+    activeRoles.forEach((role) => {
+      const roleDetails = roles[role];
+
+      if (
+        roleDetails?.bonuses &&
+        roleDetails.bonuses[itemName] !== undefined
+      ) {
+        finalPrice = roleDetails.bonuses[itemName];
+      }
+    });
   }
 
   return finalPrice;
 }
-
+  
 function clearAllTransactions() {
   document
     .querySelectorAll(".summary")
@@ -2172,22 +2203,13 @@ function calculateAndShowTotals() {
     sellDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
   });
 
-  let bonusTotal = 0;
-  document.querySelectorAll(".role-btn.active").forEach((btn) => {
-  const role = btn.dataset.role;
-  if (roleBonuses.hasOwnProperty(role)) {
-    bonusTotal += roleBonuses[role];
-   }
- });
-
-  let finalTotal = totalBuy + totalSell + bonusTotal;
+let finalTotal = totalBuy + totalSell;
 
   // Final message in the new order
   let message = `🧾 Buy Summary:\n${buyDetails || "(No items)"}\n` +
                 `🧾 Sell Summary:\n${sellDetails || "(No items)"}\n` +
-                `💎 Total Buy: ₲ ${totalBuy.toLocaleString()}\n` +
+                `💎 Total Buy: ₵${totalBuy.toLocaleString()}\n` +
                 `💰 Total Sell: ₵${totalSell.toLocaleString()}\n` +
-                `🎁 Role Bonus: ₵${bonusTotal.toLocaleString()}\n` +
 
                 `🧮 Final Total: ₵${finalTotal.toLocaleString()}`;
 
@@ -2201,7 +2223,11 @@ return Array.from(summaryDiv.querySelectorAll("div")).reduce((acc, div) => {
 let quantity = parseInt(div.dataset.quantity);
 let itemName = div.dataset.itemName;
 let basePrice = parseFloat(div.dataset.basePrice);
-let adjustedPrice = calculateDiscountedPrice(itemName, basePrice);
+const adjustedPrice = calculateDiscountedPrice(
+  itemName,
+  basePrice,
+  summaryDiv.id === "buySummary"
+);
 return acc + adjustedPrice * quantity;
 }, 0);
 
@@ -2228,7 +2254,11 @@ summaryItems.forEach((div) => {
 const itemName = div.dataset.itemName;
 const quantity = parseInt(div.dataset.quantity);
 const basePrice = parseFloat(div.dataset.basePrice);
-const discountedPrice = calculateDiscountedPrice(itemName, basePrice);
+const discountedPrice = calculateDiscountedPrice(
+  itemName,
+  basePrice,
+  type === "buy"
+);
 const totalPrice = discountedPrice * quantity;
 
 div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(0)} Cr <button class="removeOneBtn" style="background-color: orange;">x</button><button class="removeAllBtn" style="background-color: red;">x</button>`;
