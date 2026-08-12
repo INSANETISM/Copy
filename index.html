@@ -1928,7 +1928,7 @@ function applyRoleBonuses() {
 
 function updateSummaryItem(div, quantity, basePrice) {
 let itemName = div.dataset.itemName;
-let discountedPrice = calculateDiscountedPrice(itemName, basePrice);
+let discountedPrice = calculateDiscountedPrice(itemName, basePrice, true);
 let totalPrice = discountedPrice * quantity;
 div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(0)} Cr <button class="removeOneBtn" style="background-color: orange;">x</button><button class="removeAllBtn" style="background-color: red;">x</button>`;
 div.querySelector(".removeOneBtn").addEventListener("click", () => {
@@ -2061,25 +2061,67 @@ document
 .classList.add("active");
 }
 
-function calculateDiscountedPrice(itemName, basePrice) {
-let finalPrice = basePrice;
-const activeRoles = Array.from(
-document.querySelectorAll(".role-btn.active")
-).map((btn) => btn.dataset.role);
-activeRoles.forEach((role) => {
-let roleDetails = roles[role];
-if (roleDetails.discounts && roleDetails.discounts[itemName]) {
-let discount = roleDetails.discounts[itemName] / 100;
-finalPrice = Math.min(finalPrice, basePrice * (1 - discount));
-}
+function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
+  let finalPrice = basePrice;
 
-if (roleDetails.bonuses && roleDetails.bonuses[itemName]) {
-finalPrice = roleDetails.bonuses[itemName];
-}
+  const activeRoles = Array.from(
+    document.querySelectorAll(".role-btn.active")
+  ).map((btn) => btn.dataset.role);
 
-});
+  // -----------------------------------
+  // Specific item discounts
+  // -----------------------------------
+  activeRoles.forEach((role) => {
+    const roleDetails = roles[role];
 
-return finalPrice;
+    if (roleDetails?.discounts?.[itemName]) {
+      const discount = roleDetails.discounts[itemName] / 100;
+      const discountedPrice = basePrice * (1 - discount);
+
+      finalPrice = Math.min(finalPrice, discountedPrice);
+    }
+
+    // Existing special price bonuses
+    if (roleDetails?.bonuses?.[itemName]) {
+      finalPrice = roleDetails.bonuses[itemName];
+    }
+  });
+
+  // -----------------------------------
+  // General BUY discounts
+  // -----------------------------------
+  if (isBuy) {
+    let generalDiscount = 0;
+
+    if (activeRoles.includes("Ash Born")) {
+      generalDiscount = Math.max(generalDiscount, 25);
+    }
+
+    if (activeRoles.includes("Ashen Verteran")) {
+      generalDiscount = Math.max(generalDiscount, 20);
+    }
+
+    if (activeRoles.includes("Veteran")) {
+      generalDiscount = Math.max(generalDiscount, 10);
+    }
+
+    if (activeRoles.includes("First Responders")) {
+      generalDiscount = Math.max(generalDiscount, 10);
+    }
+
+    if (activeRoles.includes("Medic")) {
+      generalDiscount = Math.max(generalDiscount, 10);
+    }
+
+    if (generalDiscount > 0) {
+      const generalDiscountedPrice =
+        basePrice * (1 - generalDiscount / 100);
+
+      finalPrice = Math.min(finalPrice, generalDiscountedPrice);
+    }
+  }
+
+  return finalPrice;
 }
 
 function clearAllTransactions() {
@@ -2111,7 +2153,7 @@ function calculateAndShowTotals() {
     let name = div.dataset.itemName;
     let qty = parseInt(div.dataset.quantity);
     let basePrice = parseFloat(div.dataset.basePrice);
-    let adjustedPrice = calculateDiscountedPrice(name, basePrice);
+    let adjustedPrice = calculateDiscountedPrice(name, basePrice, true);
     let totalPrice = adjustedPrice * qty;
     totalBuy += totalPrice;
     buyDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
@@ -2130,32 +2172,6 @@ function calculateAndShowTotals() {
     sellDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
   });
 
-// Role discounts
-const hasRole = (role) =>
-  document.querySelector(`.role-btn[data-role="${role}"]`)?.classList.contains("active");
-
-let discount = 1.0;
-let discountLabel = "";
-
-if (hasRole("Ash Born")) {
-  discount = 0.75;
-  discountLabel = " (Ash Born 25% Off)";
-} else if (hasRole("Ashen Verteran")) {
-  discount = 0.80;
-  discountLabel = " (Ashen Verteran 20% Off)";
-} else if (
-  hasRole("Veteran") ||
-  hasRole("First Responders") ||
-  hasRole("Medic")
-) {
-  discount = 0.90;
-  if (hasRole("Veteran")) discountLabel = " (Veteran 10% Off)";
-  if (hasRole("First Responders")) discountLabel = " (First Responders 10% Off)";
-  if (hasRole("Medic")) discountLabel = " (Medic 10% Off)";
-}
-
-  let discountedBuy = totalBuy * discount;
-
   let bonusTotal = 0;
   document.querySelectorAll(".role-btn.active").forEach((btn) => {
   const role = btn.dataset.role;
@@ -2164,12 +2180,12 @@ if (hasRole("Ash Born")) {
    }
  });
 
-  let finalTotal = discountedBuy + totalSell + bonusTotal;
+  let finalTotal = totalBuy + totalSell + bonusTotal;
 
   // Final message in the new order
   let message = `🧾 Buy Summary:\n${buyDetails || "(No items)"}\n` +
                 `🧾 Sell Summary:\n${sellDetails || "(No items)"}\n` +
-                `💸 Total Buy${discountLabel}: ₵${discountedBuy.toLocaleString()}\n` +
+                `💎 Total Buy: ₲ ${totalBuy.toLocaleString()}\n` +
                 `💰 Total Sell: ₵${totalSell.toLocaleString()}\n` +
                 `🎁 Role Bonus: ₵${bonusTotal.toLocaleString()}\n` +
 
