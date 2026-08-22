@@ -73,11 +73,13 @@ body {
 }
 
 .roles-container {
+  display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 20px;
   width: 100%;
   max-width: 900px;
+  padding: 20px;
+  gap: 15px;
   box-sizing: border-box;
 }
 
@@ -85,8 +87,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100px;
-  margin-right: 10px; 
+  width: 110px;
+  min-width: 110px;
+  margin-right: 0;
+  flex-shrink: 0;
 }
 
 .button-column button {
@@ -98,17 +102,20 @@ body {
 
 .roles-column {
   display: flex;
+  flex-direction: row;
   gap: 10px;
-  width: 100%;
-  margin-left: 10px; 
+  flex: 1;
+  min-width: 0;
+  margin-left: 0;
 }
 
 .roles-column > div {
-  max-width: 400px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 5px;
   flex: 1;
+  min-width: 0;
+  max-width: none;
 }
 
 .role-btn {
@@ -500,73 +507,80 @@ h1, h2 {
 }
 
 @media (max-width: 600px) {
-.main-layout {
+  .main-layout {
     flex-direction: column;
     padding: 10px;
     width: 100%;
     max-width: 100%;
-    padding-right: 15px;
     box-sizing: border-box;
   }
 
-.calculator,
-.roles-container {
-   flex-direction: column;
-   max-width: 100%;
-   width: 100%;
-   padding: 10px;
-  }
-
-.roles-container {
-   display: flex;
-   flex-direction: row;
-   flex-wrap: wrap;
-   gap: 10px;
-   justify-content: center;
-   width: 100%;
-  }
-
- .roles-column > div {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+  .calculator,
+    /* Bottom roles box */
+  .roles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     width: 100%;
-    max-width: none;
-    flex: 1 1 100%;
   }
 
-
-.roles-column > div {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   gap: 8px;
-   width: 100%;
-  }
-
- .role-btn {
+  /* Calculate / Clear All / Clear Roles */
+  .button-column {
+    display: flex;
+    flex-direction: row;
     width: 100%;
     min-width: 0;
+    margin: 0;
+    gap: 5px;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .button-column button {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    font-size: 14px;
+    padding: 10px 5px;
+  }
+
+  /* Role Bonus underneath the buttons */
+  #bonus-wrapper {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Two role columns */
+  .roles-column {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 8px;
+    margin: 0;
+  }
+
+  /* Each side is ONE column */
+  .roles-column > div {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 50%;
+    max-width: none;
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  .role-btn {
+    width: 100%;
+    min-width: 0;
+    height: 35px;
+    margin: 0;
     font-size: 13px;
+    padding: 6px;
     white-space: normal;
-    padding: 8px 6px;
-  }
-}
-
-.button-column {
-   width: 100%;
-   margin-right: 0;
-   margin-bottom: 15px;
-   flex-direction: row;
-   justify-content: space-around;
-   gap: 5px;
-  }
-
-.button-column button,
- #calculateBtn {
-   width: 100%;
-   font-size: 16px;
-   padding: 12px 10px;
-   min-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 .tab {
