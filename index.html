@@ -1869,8 +1869,6 @@ function handleRoleTurnIn(item, summaryDiv) {
     case "Radio":
     case "Cassette Tape":
       // Signal Junkie: Turn in 25 radios & 25 cassettes
-      // Usually triggers discount, no direct add here (unless you want a fixed turn-in count)
-      // If needed, add a fixed quantity of 25 each to summary:
       addItemToSummary("Radio", 25, item.price, summaryDiv);
       addItemToSummary("Cassette Tape", 25, item.price, summaryDiv);
       break;
@@ -2070,12 +2068,31 @@ rolesContainer2.appendChild(container);
 
 }
 
-  function populateRoleTurnIns() {
+ function populateRoleTurnIns() {
   const container = document.getElementById("roleTurnInButtons");
 
   container.innerHTML = "";
 
-  Object.keys(roles).forEach((roleName) => {
+  // ONLY roles with confirmed physical hand-ins
+  const handInRoles = [
+    "Chain Smoker",
+    "Pen Pusher",
+    "The Botanist",
+    "Powder Ranger",
+    "Book Worm",
+    "Master Hunter",
+    "Ranch Hand",
+    "Teddy Collector",
+    "Sneaker Head",
+    "Master Fisher",
+    "Demolitions Expert",
+    "Hat Collector",
+    "Tech Runner",
+    "Master Chef",
+    "Blood Donor"
+  ];
+
+  handInRoles.forEach((roleName) => {
     const button = document.createElement("button");
 
     button.textContent = roleName;
@@ -2089,9 +2106,29 @@ rolesContainer2.appendChild(container);
   });
 }
 
-  function handleRoleTurnInByRole(roleName) {
+function handleRoleTurnInByRole(roleName) {
   const summaryDiv = document.getElementById("roleTurnInSummary");
 
+  // Hat Collector: 9 different ball caps = ₵700
+  // 50% helmet discount is handled separately.
+  if (roleName === "Hat Collector") {
+    addItemToSummary("Hat Collector Reward", 1, 700, summaryDiv);
+    return;
+  }
+
+  // Master Chef: 25 Deer Steaks + 15 Boar Steaks + 15 Bear Steaks = ₵2,000
+// 10% food & drinks discount is handled separately.
+if (roleName === "Master Chef") {
+  addItemToSummary("Master Chef Reward", 1, 2000, summaryDiv);
+  return;
+}
+
+ // Demolitions Expert: 20 full IEDs = ₵110,000 reward
+if (roleName === "Demolitions Expert") {
+  addItemToSummary("Demolitions Expert Reward", 1, 110000, summaryDiv);
+  return;
+}
+  
   // Find the items associated with this role
   const turnIns = roleTurnIns[roleName];
 
@@ -2108,8 +2145,7 @@ rolesContainer2.appendChild(container);
     return;
   }
 
-  // Roles that don't have a simple roleTurnIns entry
-  // use the existing special turn-in logic.
+
   const roleTurnInItems = {
     "Chain Smoker": { name: "Cigarettes", price: 100 },
     "Pen Pusher": { name: "Pens", price: 100 },
@@ -2121,6 +2157,8 @@ rolesContainer2.appendChild(container);
     "Book Worm": { name: "Books", price: 100 },
     "Master Hunter": { name: "Bear Pelt", price: 500 },
     "Ranch Hand": { name: "Goat Pelt", price: 100 },
+    "Hat Collector": { name: "Hat Collector Reward", price: 700 },
+    "Tech Runner": { name: "Radio", price: 100 },
     "Blood Donor": { name: "Filled Blood Bag", price: 100 }
   };
 
