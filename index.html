@@ -99,15 +99,14 @@ body {
   display: flex;
   gap: 10px;
   width: 100%;
-  margin-left: 10px; 
+  margin-left: 10px;
 }
 
 .roles-column > div {
-  max-width: 400px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 150px);
   gap: 5px;
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 .role-btn {
@@ -525,11 +524,15 @@ h1, h2 {
    width: 100%;
   }
 
-.roles-column {
-   flex-direction: column;
-   margin-left: 0;
-   gap: 10px;
+ .roles-column > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    max-width: none;
+    flex: 1 1 100%;
   }
+
 
 .roles-column > div {
    display: grid;
@@ -538,13 +541,14 @@ h1, h2 {
    width: 100%;
   }
 
-.role-btn {
-   width: 100%;
-   min-width: 0;
-   font-size: 13px;
-   white-space: normal;
-   padding: 8px 6px;
+ .role-btn {
+    width: 100%;
+    min-width: 0;
+    font-size: 13px;
+    white-space: normal;
+    padding: 8px 6px;
   }
+}
 
 .button-column {
    width: 100%;
