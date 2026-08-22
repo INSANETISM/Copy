@@ -623,56 +623,69 @@ h1, h2 {
 </style>
 
 <body>
-  <div class="main-layout">
+<div class="main-layout">
 
-    <!-- Calculator Section -->
-    <div class="calculator">
+  <!-- Calculator Section -->
+  <div class="calculator">
+
     <h1 class="logo-heading">ASHES OF HUMANITY</h1>
 
-      <!-- Tabs -->
-<div class="tab">
-  <button class="tablinks" data-tab="buyTab">Buy</button>
-  <button class="tablinks" data-tab="sellTab">Sell</button>
-  <button class="tablinks" data-tab="rolesTab">Roles</button>
-</div>
+    <!-- Tabs -->
+    <div class="tab">
+      <button class="tablinks" data-tab="buyTab">Buy</button>
+      <button class="tablinks" data-tab="sellTab">Sell</button>
+      <button class="tablinks" data-tab="rolesTab">Roles</button>
+    </div>
 
-      <!-- Buy Tab -->
-      <div class="tabcontent" align="left" id="buyTab">
-        <div id="buyItemButtons" style="position: relative;">
-          <!-- Buttons for categories/items will be dynamically added here -->
-        </div>
-        <div id="buySummary" class="summary"></div>
+    <!-- Buy Tab -->
+    <div class="tabcontent" align="left" id="buyTab">
+      <div id="buyItemButtons" style="position: relative;">
+        <!-- Buttons for categories/items will be dynamically added here -->
       </div>
+      <div id="buySummary" class="summary"></div>
+    </div>
 
-      <!-- Sell Tab -->
-      <div class="tabcontent" id="sellTab">
-        <div id="itemButtons" style="position: relative;">
-          <!-- Buttons for categories/items will be dynamically added here -->
-        </div>
-        <div id="sellSummary" class="summary"></div>
+    <!-- Sell Tab -->
+    <div class="tabcontent" id="sellTab">
+      <div id="itemButtons" style="position: relative;">
+        <!-- Buttons for categories/items will be dynamically added here -->
+      </div>
+      <div id="sellSummary" class="summary"></div>
+    </div>
+
+    <!-- Roles Tab -->
+    <div class="tabcontent" id="rolesTab">
+      <div id="roleTurnInButtons" style="position: relative;">
+        <!-- Role turn-in buttons will be dynamically added here -->
+      </div>
+      <div id="roleTurnInSummary" class="summary"></div>
+    </div>
+
+  </div> <!-- END calculator -->
+
+
+  <!-- Roles Container Section -->
+  <div class="roles-container">
+
+    <div class="button-column">
+      <button id="calculateBtn" class="action-btn">Calculate</button>
+      <button id="clearAllBtn" class="action-btn">Clear All</button>
+      <button id="clearRolesBtn" class="action-btn">Clear Roles</button>
+
+      <!-- Role bonus display -->
+      <div id="bonus-wrapper" style="margin-top: 6px; color: orange; font-weight: normal; font-size: 1.1em;">
+        Role Bonus: <span id="bonus-total">₵0</span>
       </div>
     </div>
 
-<!-- Roles Container Section -->
-<div class="roles-container">
-  <div class="button-column">
-    <button id="calculateBtn" class="action-btn">Calculate</button>
-    <button id="clearAllBtn" class="action-btn">Clear All</button>
-    <button id="clearRolesBtn" class="action-btn">Clear Roles</button>
-
-    <!-- Role bonus display -->
-    <div id="bonus-wrapper" style="margin-top: 6px; color: orange; font-weight: normal; font-size: 1.1em;">
-      Role Bonus: <span id="bonus-total">₵0</span>
+    <div class="roles-column">
+      <div id="roleColumn1"></div>
+      <div id="roleColumn2"></div>
     </div>
+
   </div>
 
-  <div class="roles-column">
-    <div id="roleColumn1"></div>
-    <div id="roleColumn2"></div>
-  </div>
-</div>
-
-  </div> <!-- END main-layout -->
+</div> <!-- END main-layout -->
 
 <footer class="site-footer">
   <p>© 2026 Ashes of Humanity. All rights reserved.</p>
@@ -1617,6 +1630,21 @@ const roleBonuses = {
   "Master Fisher": 3000,
 };
 
+  const roleTurnIns = {
+  "Chain Smoker": [
+    { name: "Cigarettes", quantity: 250, price: 100 }
+  ],
+
+  "Pen Pusher": [
+    { name: "Pens", quantity: 250, price: 100 }
+  ],
+
+  "Book Worm": [
+    { name: "Books", quantity: 300, price: 100 },
+    { name: "Bible", quantity: 1, price: 5000 }
+  ]
+};
+  
 const itemsWithRoleTurnIn = new Set([
   "Cigarettes",
   "Pens",
@@ -1662,6 +1690,7 @@ let sellNavigationStack = [sellitems];
 populateBuyButtons(buyitems, buyItemButtonsDiv, true);
 populateSellButtons(sellitems);
 populateRoles();
+populateRoleTurnIns();
 attachEventListeners();
 // Handle closing of modal
 document.querySelector(".close").onclick = function () {
@@ -1739,7 +1768,7 @@ function addReturnButton(container, type) {
 }
 
 function populateBulkOptions(container, item, summaryDiv, type) {
-  container.innerHTML = ""; // Clear container
+  container.innerHTML = "";
 
   item.bulkOptions.forEach((quantity) => {
     let buttonText = `${item.name} x ${quantity}`;
@@ -1747,17 +1776,6 @@ function populateBulkOptions(container, item, summaryDiv, type) {
       addItemToSummary(item.name, quantity, item.price, summaryDiv)
     );
   });
-
-  // Only show Role Turn-In button for sell items that qualify and exclude Tanned Leather
-  if (
-    type === "sell" &&
-    !item.name.startsWith("Tanned Leather") &&
-    itemsWithRoleTurnIn.has(item.name)
-  ) {
-    createButton(container, "Role Turn-In", () => {
-      handleRoleTurnIn(item, summaryDiv);
-    });
-  }
 
   addReturnButton(container, type); 
 }
@@ -2052,6 +2070,69 @@ rolesContainer2.appendChild(container);
 
 }
 
+  function populateRoleTurnIns() {
+  const container = document.getElementById("roleTurnInButtons");
+
+  container.innerHTML = "";
+
+  Object.keys(roles).forEach((roleName) => {
+    const button = document.createElement("button");
+
+    button.textContent = roleName;
+    button.className = "item-button";
+
+    button.onclick = () => {
+      handleRoleTurnInByRole(roleName);
+    };
+
+    container.appendChild(button);
+  });
+}
+
+  function handleRoleTurnInByRole(roleName) {
+  const summaryDiv = document.getElementById("roleTurnInSummary");
+
+  // Find the items associated with this role
+  const turnIns = roleTurnIns[roleName];
+
+  if (turnIns) {
+    turnIns.forEach((item) => {
+      addItemToSummary(
+        item.name,
+        item.quantity,
+        item.price,
+        summaryDiv
+      );
+    });
+
+    return;
+  }
+
+  // Roles that don't have a simple roleTurnIns entry
+  // use the existing special turn-in logic.
+  const roleTurnInItems = {
+    "Chain Smoker": { name: "Cigarettes", price: 100 },
+    "Pen Pusher": { name: "Pens", price: 100 },
+    "The Botanist": { name: "Cannabis", price: 30 },
+    "Powder Ranger": { name: "Cocaine", price: 200 },
+    "Teddy Collector": { name: "Teddy Bears (4/4)", price: 150 },
+    "Sneaker Head": { name: "Sneakers (5/5)", price: 200 },
+    "Master Fisher": { name: "Fish (5/5)", price: 300 },
+    "Book Worm": { name: "Books", price: 100 },
+    "Master Hunter": { name: "Bear Pelt", price: 500 },
+    "Ranch Hand": { name: "Goat Pelt", price: 100 },
+    "Blood Donor": { name: "Filled Blood Bag", price: 100 }
+  };
+
+  const item = roleTurnInItems[roleName];
+
+  if (item) {
+    handleRoleTurnIn(item, summaryDiv);
+  } else {
+    alert(`${roleName} does not have a turn-in configured.`);
+  }
+}
+  
 function attachEventListeners() {
 document.querySelectorAll(".role-btn").forEach((button) => {
 button.addEventListener("click", function() {
