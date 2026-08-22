@@ -1395,6 +1395,12 @@ const roles = {
       "Cocaine": 400
     }
   },
+   "Spray Painter": {
+    description: "Sell 150 spray paints → Units now sell for ₵400 each",
+    bonuses: {
+      "Spray Paint": 400
+    }
+  },
   "Golden Gunner": {
     description: "Kill with Gold Deagle → 50% off pistols & ammo",
     discounts: {
@@ -2089,6 +2095,12 @@ rolesContainer2.appendChild(container);
     "Hat Collector",
     "Tech Runner",
     "Master Chef",
+    "Fight Club",
+    "Egg Hunter",
+    "Spray Painter",
+    "Bill Cosby",
+    "Pretty in Pink",
+    "Knight of Ashes",
     "Blood Donor"
   ];
 
@@ -2128,6 +2140,40 @@ if (roleName === "Demolitions Expert") {
   addItemToSummary("Demolitions Expert Reward", 1, 110000, summaryDiv);
   return;
 }
+
+  // Fight Club: 50 Gold Brass Knuckles + ring fight = ₵3,000
+// The optional ₵7,000 outcome is not included.
+if (roleName === "Fight Club") {
+  addItemToSummary("Fight Club Reward", 1, 3000, summaryDiv);
+  return;
+}
+
+  // Egg Hunter: Complete all 11 animal egg capsules = ₵15,000
+if (roleName === "Egg Hunter") {
+  addItemToSummary("Egg Hunter Reward", 1, 15000, summaryDiv);
+  return;
+}
+
+if (roleName === "Spray Painter") {
+  addItemToSummary("Spray Paint", 150, 200, summaryDiv);
+  addItemToSummary("Spray Painter Reward", 1, 5000, summaryDiv);
+  return;
+}
+
+  if (roleName === "Bill Cosby") {
+  addItemToSummary("Bill Cosby Reward", 1, 10000, summaryDiv);
+  return;
+}
+
+  if (roleName === "Pretty in Pink") {
+  addItemToSummary("Pretty in Pink Reward", 1, 5000, summaryDiv);
+  return;
+}
+
+if (roleName === "Knight of Ashes") {
+  addItemToSummary("Knight of Ashes Reward", 1, 7000, summaryDiv);
+  return;
+}
   
   // Find the items associated with this role
   const turnIns = roleTurnIns[roleName];
@@ -2157,7 +2203,6 @@ if (roleName === "Demolitions Expert") {
     "Book Worm": { name: "Books", price: 100 },
     "Master Hunter": { name: "Bear Pelt", price: 500 },
     "Ranch Hand": { name: "Goat Pelt", price: 100 },
-    "Hat Collector": { name: "Hat Collector Reward", price: 700 },
     "Tech Runner": { name: "Radio", price: 100 },
     "Blood Donor": { name: "Filled Blood Bag", price: 100 }
   };
