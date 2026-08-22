@@ -564,14 +564,19 @@ h1, h2 {
   }
 
 .tab {
-   gap: 10px;
-   flex-wrap: wrap;
+   gap: 5px;
+   flex-wrap: nowrap;
+   width: 100%;
+   padding: 2px;
   }
 
 .tab button {
-   flex: 1 1 100%;
+   flex: 1 1 0;
+   min-width: 0;
+   width: auto;
+   margin: 4px 2px;
    font-size: 14px;
-   padding: 10px;
+   padding: 10px 4px;
   }
 
 #buyItemButtons,
@@ -592,12 +597,14 @@ h1, h2 {
 }
 
 .item-button {
-  width: 100% !important;  
-  max-width: 110px;
-   font-size: 13px;
-   padding: 8px 6px;
-   margin: 4px;
+   width: 100% !important;
+   max-width: none;
+   min-width: 0;
+   font-size: 12px;
+   padding: 8px 4px;
+   margin: 2px;
    white-space: normal;
+   overflow-wrap: break-word;
   }
 
 .summary {
