@@ -1966,14 +1966,34 @@ function applyRoleBonuses() {
 }
   
 function updateSummaryItem(div, quantity, basePrice) {
-let itemName = div.dataset.itemName;
-let discountedPrice = calculateDiscountedPrice(itemName, basePrice, true);
-let totalPrice = discountedPrice * quantity;
-div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(0)} Cr <button class="removeOneBtn" style="background-color: orange;">x</button><button class="removeAllBtn" style="background-color: red;">x</button>`;
-div.querySelector(".removeOneBtn").addEventListener("click", () => {
-removeOneItem(div);
-});
+  let itemName = div.dataset.itemName;
+  let summaryDiv = div.parentElement;
 
+  // Identify what type of transaction this is
+  let summaryType = summaryDiv ? summaryDiv.id : "";
+
+  let discountedPrice = calculateDiscountedPrice(
+    itemName,
+    basePrice,
+    summaryType
+  );
+
+  let totalPrice = discountedPrice * quantity;
+
+  div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(0)} Cr 
+    <button class="removeOneBtn" style="background-color: orange;">x</button>
+    <button class="removeAllBtn" style="background-color: red;">x</button>`;
+
+  div.querySelector(".removeOneBtn").addEventListener("click", () => {
+    removeOneItem(div);
+  });
+
+  div.querySelector(".removeAllBtn").addEventListener("click", () => {
+    summaryDiv.removeChild(div);
+    updateSummaries();
+  });
+}
+  
 div.querySelector(".removeAllBtn").addEventListener("click", () => {
 let summaryDiv = div.parentElement;
 summaryDiv.removeChild(div);
@@ -2242,7 +2262,7 @@ document
 .classList.add("active");
 }
 
-function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
+function calculateDiscountedPrice(itemName, basePrice, summaryType = "") {
   const activeRoles = Array.from(
     document.querySelectorAll(".role-btn.active")
   ).map((btn) => btn.dataset.role);
@@ -2250,7 +2270,21 @@ function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
   let finalPrice = basePrice;
 
   // =====================================================
-  // 1. FIND THE BEST SPECIFIC ITEM DISCOUNT
+  // 1. ROLE TURN-INS ARE COMPLETELY SEPARATE
+  // =====================================================
+  // Anything inside roleTurnInSummary gets its original
+  // role-turn-in price.
+  //
+  // NO BUY DISCOUNTS
+  // NO SELL BONUSES
+  // NO ROLE-SPECIFIC DISCOUNTS
+  //
+  if (summaryType === "roleTurnInSummary") {
+    return basePrice;
+  }
+
+  // =====================================================
+  // 2. FIND THE BEST SPECIFIC ITEM DISCOUNT
   // =====================================================
 
   let bestSpecificDiscount = 0;
@@ -2273,16 +2307,16 @@ function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
     }
   });
 
-  // Apply the best specific discount
+  // Apply the BEST specific discount
   if (hasSpecificDiscount) {
     finalPrice = basePrice * (1 - bestSpecificDiscount / 100);
   }
 
   // =====================================================
-  // 2. GENERAL BUY DISCOUNTS
+  // 3. GENERAL BUY DISCOUNTS
   // =====================================================
 
-  if (isBuy && !hasSpecificDiscount) {
+  if (summaryType === "buySummary" && !hasSpecificDiscount) {
     let generalDiscount = 0;
 
     if (activeRoles.includes("Ash Born")) {
@@ -2311,10 +2345,10 @@ function calculateDiscountedPrice(itemName, basePrice, isBuy = false) {
   }
 
   // =====================================================
-  // 3. SELL ROLE BONUSES
+  // 4. SELL ROLE BONUSES
   // =====================================================
 
-  if (!isBuy) {
+  if (summaryType === "sellSummary") {
     activeRoles.forEach((role) => {
       const roleDetails = roles[role];
 
@@ -2351,19 +2385,35 @@ function clearRoles() {
 function calculateAndShowTotals() {
   let buyItems = Array.from(document.getElementById("buySummary").children);
   let sellItems = Array.from(document.getElementById("sellSummary").children);
+  let roleItems = Array.from(document.getElementById("roleTurnInSummary").children);
 
   let buyDetails = "";
   let totalBuy = 0;
+
+  // =====================================================
+  // BUY SUMMARY
+  // =====================================================
 
   buyItems.forEach((div) => {
     let name = div.dataset.itemName;
     let qty = parseInt(div.dataset.quantity);
     let basePrice = parseFloat(div.dataset.basePrice);
-    let adjustedPrice = calculateDiscountedPrice(name, basePrice, true);
+
+    let adjustedPrice = calculateDiscountedPrice(
+      name,
+      basePrice,
+      "buySummary"
+    );
+
     let totalPrice = adjustedPrice * qty;
     totalBuy += totalPrice;
+
     buyDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
   });
+
+  // =====================================================
+  // SELL SUMMARY
+  // =====================================================
 
   let sellDetails = "";
   let totalSell = 0;
@@ -2372,40 +2422,82 @@ function calculateAndShowTotals() {
     let name = div.dataset.itemName;
     let qty = parseInt(div.dataset.quantity);
     let basePrice = parseFloat(div.dataset.basePrice);
-    let adjustedPrice = calculateDiscountedPrice(name, basePrice);
+
+    let adjustedPrice = calculateDiscountedPrice(
+      name,
+      basePrice,
+      "sellSummary"
+    );
+
     let totalPrice = adjustedPrice * qty;
     totalSell += totalPrice;
+
     sellDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
   });
 
-let finalTotal = totalBuy + totalSell;
+  // =====================================================
+  // ROLE TURN-IN SUMMARY
+  // =====================================================
 
-  // Final message in the new order
-  let message = `🧾 Buy Summary:\n${buyDetails || "(No items)"}\n` +
-                `🧾 Sell Summary:\n${sellDetails || "(No items)"}\n` +
-                `💎 Total Buy: ₵${totalBuy.toLocaleString()}\n` +
-                `💰 Total Sell: ₵${totalSell.toLocaleString()}\n` +
+  let roleDetails = "";
+  let totalRoleTurnIns = 0;
 
-                `🧮 Final Total: ₵${finalTotal.toLocaleString()}`;
+  roleItems.forEach((div) => {
+    let name = div.dataset.itemName;
+    let qty = parseInt(div.dataset.quantity);
+    let basePrice = parseFloat(div.dataset.basePrice);
+
+    // Role turn-ins use their RAW price.
+    // No discounts or sell bonuses.
+    let adjustedPrice = calculateDiscountedPrice(
+      name,
+      basePrice,
+      "roleTurnInSummary"
+    );
+
+    let totalPrice = adjustedPrice * qty;
+    totalRoleTurnIns += totalPrice;
+
+    roleDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
+  });
+
+  // =====================================================
+  // TOTALS
+  // =====================================================
+
+  let finalTotal = totalBuy + totalSell + totalRoleTurnIns;
+
+  // =====================================================
+  // FINAL MESSAGE
+  // =====================================================
+
+  let message =
+    `🧾 Buy Summary:\n${buyDetails || "(No items)"}\n` +
+    `🧾 Sell Summary:\n${sellDetails || "(No items)"}\n` +
+    `🎖️ Role Turn-In Summary:\n${roleDetails || "(No role turn-ins)"}\n` +
+    `💎 Total Buy: ₵${totalBuy.toLocaleString()}\n` +
+    `💰 Total Sell: ₵${totalSell.toLocaleString()}\n` +
+    `🎖️ Total Role Turn-Ins: ₵${totalRoleTurnIns.toLocaleString()}\n` +
+    `🧮 Final Total: ₵${finalTotal.toLocaleString()}`;
 
   document.getElementById("modalText").textContent = message;
-document.getElementById("summaryModal").style.display = "block";
-
+  document.getElementById("summaryModal").style.display = "block";
 }
 
 function calculateTotal(summaryDiv) {
-return Array.from(summaryDiv.querySelectorAll("div")).reduce((acc, div) => {
-let quantity = parseInt(div.dataset.quantity);
-let itemName = div.dataset.itemName;
-let basePrice = parseFloat(div.dataset.basePrice);
-const adjustedPrice = calculateDiscountedPrice(
-  itemName,
-  basePrice,
-  summaryDiv.id === "buySummary"
-);
-return acc + adjustedPrice * quantity;
-}, 0);
+  return Array.from(summaryDiv.querySelectorAll("div")).reduce((acc, div) => {
+    let quantity = parseInt(div.dataset.quantity);
+    let itemName = div.dataset.itemName;
+    let basePrice = parseFloat(div.dataset.basePrice);
 
+    const adjustedPrice = calculateDiscountedPrice(
+      itemName,
+      basePrice,
+      summaryDiv.id
+    );
+
+    return acc + adjustedPrice * quantity;
+  }, 0);
 }
 
 function openTab(evt, tabName) {
@@ -2421,36 +2513,37 @@ evt.currentTarget.classList.add("active");
 }
 
 function updateSummaries() {
-// Recalculate and update the summaries for both buy and sell tabs
-["buy", "sell"].forEach((type) => {
-const summaryDiv = document.getElementById(type + "Summary");
-const summaryItems = summaryDiv.querySelectorAll("div");
-summaryItems.forEach((div) => {
-const itemName = div.dataset.itemName;
-const quantity = parseInt(div.dataset.quantity);
-const basePrice = parseFloat(div.dataset.basePrice);
-const discountedPrice = calculateDiscountedPrice(
-  itemName,
-  basePrice,
-  type === "buy"
-);
-const totalPrice = discountedPrice * quantity;
+  ["buy", "sell"].forEach((type) => {
+    const summaryDiv = document.getElementById(type + "Summary");
+    const summaryItems = summaryDiv.querySelectorAll("div");
 
-div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(0)} Cr <button class="removeOneBtn" style="background-color: orange;">x</button><button class="removeAllBtn" style="background-color: red;">x</button>`;
+    summaryItems.forEach((div) => {
+      const itemName = div.dataset.itemName;
+      const quantity = parseInt(div.dataset.quantity);
+      const basePrice = parseFloat(div.dataset.basePrice);
 
-div.querySelector(".removeOneBtn").addEventListener("click", () => {
-removeOneItem(div);
-});
+      const discountedPrice = calculateDiscountedPrice(
+        itemName,
+        basePrice,
+        summaryDiv.id
+      );
 
-div.querySelector(".removeAllBtn").addEventListener("click", () => {
-summaryDiv.removeChild(div);
-updateSummaries();
-});
+      const totalPrice = discountedPrice * quantity;
 
-});
+      div.innerHTML = `${itemName} x ${quantity} = ${totalPrice.toFixed(0)} Cr 
+        <button class="removeOneBtn" style="background-color: orange;">x</button>
+        <button class="removeAllBtn" style="background-color: red;">x</button>`;
 
-});
+      div.querySelector(".removeOneBtn").addEventListener("click", () => {
+        removeOneItem(div);
+      });
 
+      div.querySelector(".removeAllBtn").addEventListener("click", () => {
+        summaryDiv.removeChild(div);
+        updateSummaries();
+      });
+    });
+  });
 }
 
 function updateRoleEffects() {
