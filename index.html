@@ -2435,23 +2435,25 @@ function calculateAndShowTotals() {
   let totalRoleTurnIns = 0;
 
   roleItems.forEach((div) => {
-    let name = div.dataset.itemName;
-    let qty = parseInt(div.dataset.quantity);
-    let basePrice = parseFloat(div.dataset.basePrice);
+  let name = div.dataset.itemName;
+  let qty = parseInt(div.dataset.quantity);
+  let basePrice = parseFloat(div.dataset.basePrice);
 
-    // Role turn-ins use their RAW price.
-    // No discounts or sell bonuses.
-    let adjustedPrice = calculateDiscountedPrice(
-      name,
-      basePrice,
-      "roleTurnInSummary"
-    );
+  if (name === "Bible") {
+    basePrice = 5000;
+  }
 
-    let totalPrice = adjustedPrice * qty;
-    totalRoleTurnIns += totalPrice;
+  let adjustedPrice = calculateDiscountedPrice(
+    name,
+    basePrice,
+    "roleTurnInSummary"
+  );
 
-    roleDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
-  });
+  let totalPrice = adjustedPrice * qty;
+  totalRoleTurnIns += totalPrice;
+
+  roleDetails += `${name} x ${qty} = ₵${totalPrice.toLocaleString()}\n`;
+});
 
   // =====================================================
   // TOTALS
