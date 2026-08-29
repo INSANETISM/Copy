@@ -1838,8 +1838,8 @@ updateSummaryItem(div, quantity, basePrice);
 summaryDiv.appendChild(div);
 }
 
-if (itemName === "Bible") adjustBiblePricing(summaryDiv);
-updateSummaries();
+if (itemName === "Bible" && summaryDiv.id === "sellSummary") {
+  adjustBiblePricing(summaryDiv);
 }
 
 function adjustBiblePricing(summaryDiv) {
