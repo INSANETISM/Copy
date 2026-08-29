@@ -1988,34 +1988,26 @@ function updateSummaryItem(div, quantity, basePrice) {
     removeOneItem(div);
   });
 
-  div.querySelector(".removeAllBtn").addEventListener("click", () => {
+   div.querySelector(".removeAllBtn").addEventListener("click", () => {
     summaryDiv.removeChild(div);
     updateSummaries();
   });
 }
-  
-div.querySelector(".removeAllBtn").addEventListener("click", () => {
-let summaryDiv = div.parentElement;
-summaryDiv.removeChild(div);
-updateSummaries();
-});
-
-}
 
 function removeOneItem(div) {
-let quantity = parseInt(div.dataset.quantity);
-if (quantity > 1) {
-let newQuantity = quantity - 1;
-div.dataset.quantity = newQuantity;
-updateSummaryItem(div, newQuantity, parseFloat(div.dataset.basePrice));
-} else {
+  let quantity = parseInt(div.dataset.quantity);
 
-let summaryDiv = div.parentElement;
-summaryDiv.removeChild(div);
-updateSummaries();
+  if (quantity > 1) {
+    let newQuantity = quantity - 1;
+    div.dataset.quantity = newQuantity;
+    updateSummaryItem(div, newQuantity, parseFloat(div.dataset.basePrice));
+  } else {
+    let summaryDiv = div.parentElement;
+    summaryDiv.removeChild(div);
+    updateSummaries();
+  }
 }
-
-}
+  
 function populateSellButtons(category = sellitems) {
   const container = document.getElementById("itemButtons");
   clearItemButtons(container);
